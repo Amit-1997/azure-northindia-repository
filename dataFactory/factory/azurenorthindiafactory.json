@@ -1,0 +1,9 @@
+{
+	"name": "azurenorthindiafactory",
+	"location": "centralindia",
+	"identity": {
+		"type": "SystemAssigned",
+		"principalId": "ab69e76a-d991-4f18-9755-a2a325253e1f",
+		"tenantId": "eb920feb-63c4-46f6-a1ad-16033378c4b0"
+	}
+}
