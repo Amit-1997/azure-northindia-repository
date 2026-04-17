@@ -5,11 +5,20 @@
 		"factoryName": {
 			"value": "azurenorthindiafactory"
 		},
+		"AzureDataLakeStorage1_accountKey": {
+			"value": ""
+		},
+		"BlobLinkedService_connectionString": {
+			"value": ""
+		},
 		"BlobToDatalakeCopyActivity_connectionString": {
 			"value": ""
 		},
 		"SinkDatalake_accountKey": {
 			"value": ""
+		},
+		"AzureDataLakeStorage1_properties_typeProperties_url": {
+			"value": "https://azurenorthindiast.dfs.core.windows.net/"
 		},
 		"SinkDatalake_properties_typeProperties_url": {
 			"value": "https://azurenorthindiast.dfs.core.windows.net/"
