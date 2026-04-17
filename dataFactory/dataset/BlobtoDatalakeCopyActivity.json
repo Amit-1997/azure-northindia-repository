@@ -10,6 +10,7 @@
 		"typeProperties": {
 			"location": {
 				"type": "AzureBlobStorageLocation",
+				"fileName": "Files",
 				"container": "onpremfiles"
 			},
 			"columnDelimiter": ",",
