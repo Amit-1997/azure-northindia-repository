@@ -68,7 +68,7 @@
 				"typeProperties": {
 					"location": {
 						"type": "AzureBlobStorageLocation",
-						"fileName": "Files",
+						"fileName": "Files/*.csv",
 						"container": "onpremfiles"
 					},
 					"columnDelimiter": ",",
