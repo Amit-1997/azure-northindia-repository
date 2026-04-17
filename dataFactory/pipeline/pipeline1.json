@@ -16,7 +16,7 @@
 				"userProperties": [],
 				"typeProperties": {
 					"dataset": {
-						"referenceName": "csvDataSet",
+						"referenceName": "DataSetForMetadata",
 						"type": "DatasetReference"
 					},
 					"fieldList": [
@@ -98,7 +98,7 @@
 							},
 							"inputs": [
 								{
-									"referenceName": "DelimitedText1",
+									"referenceName": "DatasetForBlob",
 									"type": "DatasetReference",
 									"parameters": {
 										"FileName": {
@@ -110,7 +110,7 @@
 							],
 							"outputs": [
 								{
-									"referenceName": "DelimitedText2",
+									"referenceName": "DatasetForDataLake",
 									"type": "DatasetReference"
 								}
 							]

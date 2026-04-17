@@ -1,5 +1,5 @@
 {
-	"name": "DelimitedText1",
+	"name": "DatasetForBlob",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "BlobLinkedService",
