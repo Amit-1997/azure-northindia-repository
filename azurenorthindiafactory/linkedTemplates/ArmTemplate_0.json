@@ -15,19 +15,7 @@
 			"type": "secureString",
 			"metadata": "Secure string for 'connectionString' of 'BlobLinkedService'"
 		},
-		"BlobToDatalakeCopyActivity_connectionString": {
-			"type": "secureString",
-			"metadata": "Secure string for 'connectionString' of 'BlobToDatalakeCopyActivity'"
-		},
-		"SinkDatalake_accountKey": {
-			"type": "secureString",
-			"metadata": "Secure string for 'accountKey' of 'SinkDatalake'"
-		},
 		"AzureDataLakeStorage1_properties_typeProperties_url": {
-			"type": "string",
-			"defaultValue": "https://azurenorthindiast.dfs.core.windows.net/"
-		},
-		"SinkDatalake_properties_typeProperties_url": {
 			"type": "string",
 			"defaultValue": "https://azurenorthindiast.dfs.core.windows.net/"
 		}
@@ -67,37 +55,64 @@
 			"dependsOn": []
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/BlobToDatalakeCopyActivity')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
+			"name": "[concat(parameters('factoryName'), '/DataSetForMetadata')]",
+			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
+				"linkedServiceName": {
+					"referenceName": "BlobLinkedService",
+					"type": "LinkedServiceReference"
+				},
 				"annotations": [],
-				"type": "AzureBlobStorage",
+				"type": "DelimitedText",
 				"typeProperties": {
-					"connectionString": "[parameters('BlobToDatalakeCopyActivity_connectionString')]"
-				}
-			},
-			"dependsOn": []
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/SinkDatalake')]",
-			"type": "Microsoft.DataFactory/factories/linkedServices",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"annotations": [],
-				"type": "AzureBlobFS",
-				"typeProperties": {
-					"url": "[parameters('SinkDatalake_properties_typeProperties_url')]",
-					"accountKey": {
-						"type": "SecureString",
-						"value": "[parameters('SinkDatalake_accountKey')]"
+					"location": {
+						"type": "AzureBlobStorageLocation",
+						"folderPath": "Files",
+						"container": "onpremfiles"
+					},
+					"columnDelimiter": ",",
+					"escapeChar": "\\",
+					"firstRowAsHeader": true,
+					"quoteChar": "\""
+				},
+				"schema": [
+					{
+						"name": "account",
+						"type": "String"
+					},
+					{
+						"name": "sector",
+						"type": "String"
+					},
+					{
+						"name": "year_established",
+						"type": "String"
+					},
+					{
+						"name": "revenue",
+						"type": "String"
+					},
+					{
+						"name": "employees",
+						"type": "String"
+					},
+					{
+						"name": "office_location",
+						"type": "String"
+					},
+					{
+						"name": "subsidiary_of",
+						"type": "String"
 					}
-				}
+				]
 			},
-			"dependsOn": []
+			"dependsOn": [
+				"[concat(variables('factoryId'), '/linkedServices/BlobLinkedService')]"
+			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DelimitedText1')]",
+			"name": "[concat(parameters('factoryName'), '/DatasetForBlob')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -163,7 +178,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/DelimitedText2')]",
+			"name": "[concat(parameters('factoryName'), '/DatasetForDataLake')]",
 			"type": "Microsoft.DataFactory/factories/datasets",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -219,64 +234,7 @@
 			]
 		},
 		{
-			"name": "[concat(parameters('factoryName'), '/csvDataSet')]",
-			"type": "Microsoft.DataFactory/factories/datasets",
-			"apiVersion": "2018-06-01",
-			"properties": {
-				"linkedServiceName": {
-					"referenceName": "BlobLinkedService",
-					"type": "LinkedServiceReference"
-				},
-				"annotations": [],
-				"type": "DelimitedText",
-				"typeProperties": {
-					"location": {
-						"type": "AzureBlobStorageLocation",
-						"folderPath": "Files",
-						"container": "onpremfiles"
-					},
-					"columnDelimiter": ",",
-					"escapeChar": "\\",
-					"firstRowAsHeader": true,
-					"quoteChar": "\""
-				},
-				"schema": [
-					{
-						"name": "account",
-						"type": "String"
-					},
-					{
-						"name": "sector",
-						"type": "String"
-					},
-					{
-						"name": "year_established",
-						"type": "String"
-					},
-					{
-						"name": "revenue",
-						"type": "String"
-					},
-					{
-						"name": "employees",
-						"type": "String"
-					},
-					{
-						"name": "office_location",
-						"type": "String"
-					},
-					{
-						"name": "subsidiary_of",
-						"type": "String"
-					}
-				]
-			},
-			"dependsOn": [
-				"[concat(variables('factoryId'), '/linkedServices/BlobLinkedService')]"
-			]
-		},
-		{
-			"name": "[concat(parameters('factoryName'), '/pipeline1')]",
+			"name": "[concat(parameters('factoryName'), '/PipelineForFileCopyFromBlobToADLS')]",
 			"type": "Microsoft.DataFactory/factories/pipelines",
 			"apiVersion": "2018-06-01",
 			"properties": {
@@ -295,7 +253,7 @@
 						"userProperties": [],
 						"typeProperties": {
 							"dataset": {
-								"referenceName": "csvDataSet",
+								"referenceName": "DataSetForMetadata",
 								"type": "DatasetReference",
 								"parameters": {}
 							},
@@ -378,7 +336,7 @@
 									},
 									"inputs": [
 										{
-											"referenceName": "DelimitedText1",
+											"referenceName": "DatasetForBlob",
 											"type": "DatasetReference",
 											"parameters": {
 												"FileName": {
@@ -390,7 +348,7 @@
 									],
 									"outputs": [
 										{
-											"referenceName": "DelimitedText2",
+											"referenceName": "DatasetForDataLake",
 											"type": "DatasetReference",
 											"parameters": {}
 										}
@@ -406,9 +364,9 @@
 				"annotations": []
 			},
 			"dependsOn": [
-				"[concat(variables('factoryId'), '/datasets/csvDataSet')]",
-				"[concat(variables('factoryId'), '/datasets/DelimitedText1')]",
-				"[concat(variables('factoryId'), '/datasets/DelimitedText2')]"
+				"[concat(variables('factoryId'), '/datasets/DataSetForMetadata')]",
+				"[concat(variables('factoryId'), '/datasets/DatasetForBlob')]",
+				"[concat(variables('factoryId'), '/datasets/DatasetForDataLake')]"
 			]
 		}
 	]
