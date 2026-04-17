@@ -1,5 +1,5 @@
 {
-	"name": "BlobtoDatalakeCopyActivity",
+	"name": "SourceBlob",
 	"properties": {
 		"linkedServiceName": {
 			"referenceName": "BlobToDatalakeCopyActivity",
