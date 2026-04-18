@@ -117,6 +117,62 @@
 						}
 					]
 				}
+			},
+			{
+				"name": "Success",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"url": "https://prod-00.centralindia.logic.azure.com:443/workflows/abfc50d0c8e843caa8f36d52dec1c8e5/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=MSaN0B7XXvrIyPdXDJsVbIs0lrPwEbDA7yC4ZcMUz28",
+					"body": {
+						"value": "{\n    \"pipelineName\" : \"@{pipeline().pipeline}\",\n    \"status\" : \"Succeeded\",\n    \"runId\" : \"@{pipeline().RunId}\" ,\n    \"time\"  :\"@{utcNow()}\"\n}",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Fail",
+				"type": "WebActivity",
+				"dependsOn": [
+					{
+						"activity": "ForEach1",
+						"dependencyConditions": [
+							"Failed"
+						]
+					}
+				],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"method": "POST",
+					"url": "https://prod-00.centralindia.logic.azure.com:443/workflows/abfc50d0c8e843caa8f36d52dec1c8e5/triggers/When_an_HTTP_request_is_received/paths/invoke?api-version=2016-10-01&sp=%2Ftriggers%2FWhen_an_HTTP_request_is_received%2Frun&sv=1.0&sig=MSaN0B7XXvrIyPdXDJsVbIs0lrPwEbDA7yC4ZcMUz28",
+					"body": {
+						"value": "{\n    \"pipelineName\" : \"@{pipeline().pipeline}\",\n    \"status\" : \"Failed\",\n    \"runId\" : \"@{pipeline().RunId}\" ,\n    \"time\"  :\"@{utcNow()}\"\n}",
+						"type": "Expression"
+					}
+				}
 			}
 		],
 		"annotations": []
